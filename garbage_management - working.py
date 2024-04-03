@@ -22,8 +22,8 @@ def garbage_type_and_amount_selection():
         subtype_select = int(input("Enter any number : "))
         amount = int(input("Enter garbage amount "))
         garbage_name = Garbage_sub_types[subtype_select]
-        # user_garbage_collection_in_source.append({'garbage_name':garbage_name,'amount':amount})
-        garbage_dict = {'garbage_name':garbage_name,'amount':amount} 
+        garbage_type_name = 'non_Biodegradeable_garbage'
+        garbage_dict = {'garbage_name':garbage_name,'amount':amount,'garbage_type':garbage_type_name} 
         return garbage_dict
 
 #for login mechanism 
@@ -34,9 +34,10 @@ garbage_source= ['Household garbage','SME','Industrial garbage','GO','Industrial
 class user:
     name=[]
     address = []
+
     total_bill=[]
+
     warning_msg = []
-    billing_catalog=[]
 
     def print_user_details(self):
         print("--------------- Printing user detials -----------\n")
@@ -97,25 +98,26 @@ class GMP_Bin: #underground tunnel city corp. bin
         for grbg in self.GMP_garbage:
             grbg_name = grbg['garbage_name']
             grbg_amount = grbg['amount']
-            # print("printing from allocation ",grbg_name,grbg_amount)
-            if grbg_name == 'Biodegradeable_garbage':
-                #billing test aprt
-                bill= grbg_amount*0 
-                #billing test part ends
-                bio_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
-                # print("printing bio bin dictionary ",bio_garbage_dictionary)
+            
+            if grbg_name=='non_recyclable' or grbg_name == 'recyclable':
+                grbg_type = grbg['garbage_type']
+        
+        #billing starts here
+                
+                
+        #billing ends here 
 
+            if grbg_name == 'Biodegradeable_garbage':
+                bio_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
                 #bio bin work start----------
                 bio_garbage_temp.append(bio_garbage_dictionary)
-                # print("printing bio garbage temp ",bio_garbage_temp)
-                
                 bio_bin_obj.add_garbage(bio_garbage_temp)
             
-            if grbg_name == 'non_Biodegradeable_garbage':
-    
+            elif grbg_type == 'non_Biodegradeable_garbage':
                 N_bio_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
                 N_bio_garbage_temp.append(N_bio_garbage_dictionary)
                 Non_Bio_bin_obj.add_garbage(N_bio_garbage_temp)
+               
 
     #here calculate the billing 
 
@@ -128,23 +130,46 @@ class Non_Bio_bin:
      Non_bio_bin_garbage_collection = []
      def add_garbage(self,garbage):
          self.Non_bio_bin_garbage_collection=garbage
+         
 
      def allocation_of_garbage(self):
-         #also calculate billing
-     #here allocate garbage to r bin and NR bin
-         pass
+         r_garbage_temp=[]
+         nr_garbage_temp=[]
+         for grbg in self.Non_bio_bin_garbage_collection:
+             grbg_name = grbg['garbage_name']
+             grbg_amount = grbg['amount']
+             if grbg_name=="recyclable":
+                 r_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
+                 r_garbage_temp.append(r_garbage_dictionary)
+                 r_bin_obj.add_garbage(r_garbage_temp)
+
+                 #Recylable billing start
+                 bill = grbg_amount*2
+                 bill_catalog = {'garbage_type':grbg_name,'amount':grbg_amount,'bill':bill}
+                 user_obj.total_bill.append(bill_catalog)
+                 #Recyclable billing ends 
+
+
+             elif grbg_name == "non_recyclable":
+                  nr_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
+                  nr_garbage_temp.append(nr_garbage_dictionary)
+                  nr_bin_obj.add_garbage(r_garbage_temp)
+
+             
      def printing_garbage(self):
-         pass
+         for grbg in self.Non_bio_bin_garbage_collection:
+             print(grbg)
      
 class Recyclable_bin:
     r_garbage_collection = []
-    def receive_garbage(self,r_garbage):
-        pass
+    def add_garbage(self,garbage):
+        self.r_garbage_collection=garbage
 
 class Non_Recyclable_bin:
-     def __init__(self,garbage) :
-        self.non_recyclable_garbage= garbage
-        non_recyclable_garbage_collection = []
+    nr_garbage_collection = []
+    def add_garbage(self,garbage):
+        self.nr_garbage_collection=garbage
+     
 
 class user_billing_calculation:
     #let's start calculating user billing mechanism : 
@@ -153,16 +178,18 @@ class user_billing_calculation:
 class user_billing_history:
     pass
 
-#user related stuffs here           
-# user1=user("admin","dhaka","empty","empty")
-#user related stuffs ends
+
 
 #test start
 
 bio_bin_obj=Bio_bin()
 Non_Bio_bin_obj = Non_Bio_bin()
+r_bin_obj = Recyclable_bin()
+nr_bin_obj = Non_Recyclable_bin()
+user_obj = user()
 
 #test 
+
 while(True):
     print("-----Enter any number from below----")
     print("***1 :to check user details Enter ***")
@@ -176,7 +203,7 @@ while(True):
     choice = int(input("choice : "))
     
     if choice == 1:
-        pass
+        print(user_obj.total_bill)
     elif choice == 2 :
         print("\nplease select garbage type first")
         garbage_type_selection_and_amount_dict = garbage_type_and_amount_selection()  
@@ -192,10 +219,13 @@ while(True):
     elif choice == 4:
         for grbg in bio_bin_obj.bio_main_garbage_collection:
             print(grbg)
+
+
     elif choice == 6:
         print("printing non bio bin all garbage--------")
-        for grbg in Non_Bio_bin_obj.Non_bio_bin_garbage_collection:
-            print(grbg)
+        Non_Bio_bin_obj.printing_garbage()
+
+
     elif choice == 5:
         print("Logging out ------")
         break
