@@ -82,6 +82,14 @@ class User:
 
         User.user_list.append(self)
 
+    def total_bill_calculation(self):
+        sum=0
+        for total_bill_amount in self.total_bill:
+            amount = total_bill_amount['bill']
+            sum+=amount
+            
+        print(sum)
+
     @classmethod 
     def user_exists(cls,email,password):
         for user in cls.user_list:
@@ -101,20 +109,13 @@ class Admin:
         user = User(name, email, address)
         User.user_list.append(user)
 
-    def see_user_Accounts(self):
-        for user in User.user_list:
-            print(f"Account Number: {user.account_number}, Name: {user.name}, Balance: {user.Balance}\n")
+   
 
     def print_user_details(self):
         print("--------------- Printing user detials -----------\n")
         print(f'{self.user_name} , {self.user_address} , {self.total_bill}')
     
-    def total_bill_calculation(self):
-        sum=0
-        for total_bill_amount in self.total_bill:
-            amount = total_bill_amount['amount']
-            sum+=amount
-        print(sum)
+    
 
 
 
@@ -170,7 +171,6 @@ class GMP_Bin: #underground tunnel city corp. bin
     def allocation_of_garbage_to_bins(self):
         bio_garbage_temp=[]
         N_bio_garbage_temp=[]
-
         for grbg in self.GMP_garbage:
             grbg_name = grbg['garbage_name']
             grbg_amount = grbg['amount']
@@ -302,7 +302,14 @@ while(True):
         
         if choice == 1:
             # user_obj = user()
+            print("User name ",user_obj.user_name)
+            print("your total bill is : ")
             user_obj.total_bill_calculation()
+            print("User billing catalog")
+            for bill in user_obj.total_bill:
+                print(bill)
+
+
         elif choice == 2 :
             print("\nplease select garbage type first")
             garbage_type_selection_and_amount_dict = garbage_type_and_amount_selection()  
@@ -310,7 +317,7 @@ while(True):
         #work of source bin obj start ----
             source_bin_obj = source_bin()
             source_bin_obj.receive_garbage(garbage_type_selection_and_amount_dict)
-            # source_bin_obj.printing_all_garbage()
+            source_bin_obj.printing_all_garbage()
             source_bin_obj.sending_garbage_to_GMP()
             #work of source bin obj ends ----------
             
