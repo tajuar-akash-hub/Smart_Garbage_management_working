@@ -43,17 +43,17 @@ def billing_calculation(garbage):
           
             if grbg_name == 'Biodegradeable_garbage':
                 bill = grbg_amount*0
-                print("and bill = ",bill)
+                # print("and bill = ",bill)
                 
 
             elif grbg_name=='non_recyclable':
                 bill = grbg_amount*5
-                print("and bill = ",bill)
+                # print("and bill = ",bill)
                 
 
             elif grbg_name == 'recyclable':
                 bill = grbg_amount*2
-                print("and bill = ",bill)
+                # print("and bill = ",bill)
 
              # Append billing information to the bill_list
             bill_info = {'garbage_type': grbg_name, 'amount': grbg_amount, 'bill': bill}
@@ -114,10 +114,6 @@ class Admin:
     def print_user_details(self):
         print("--------------- Printing user detials -----------\n")
         print(f'{self.user_name} , {self.user_address} , {self.total_bill}')
-    
-    
-
-
 
 
 
@@ -162,11 +158,11 @@ class GMP_Bin: #underground tunnel city corp. bin
         self.GMP_garbage.extend(garbage_from_source)
         # test function
     def printing_gmp_garbage(self):
-        print("****printing all garbage in gmp bins------\n")
+        print("****printing all garbage in gmp bins------")
         # print(self.GMP_garbage)
         for grbg in self.GMP_garbage:
             print(grbg)
-        print("gmp bin garbage prints ends---------------\n")
+        print("gmp bin garbage prints ends---------------")
 
     def allocation_of_garbage_to_bins(self):
         bio_garbage_temp=[]
@@ -178,18 +174,11 @@ class GMP_Bin: #underground tunnel city corp. bin
             if grbg_name=='non_recyclable' or grbg_name == 'recyclable':
                 grbg_type = grbg['garbage_type']
 
-        
-        #billing starts here
-                
-                
-        #billing ends here 
-
             if grbg_name == 'Biodegradeable_garbage':
                 bio_garbage_dictionary = {'garbage_type':grbg_name,'amount':grbg_amount}
                 #bio bin work start----------
                 bio_garbage_temp.append(bio_garbage_dictionary)
                 bio_bin_obj.add_garbage(bio_garbage_temp)
-
                
             
             elif grbg_type == 'non_Biodegradeable_garbage':
@@ -265,6 +254,18 @@ user_obj = None
 Admin = Admin()
 #login system implementation ends 
 
+
+#starting guide 
+#first run the programme 
+#then login or register 
+#then select any of the options form below 
+# for example to add garbage , press 2 and select either 0 or 1 for bio and non bio 
+#you can also check your bio bin and non bio bin
+#the most crucial part is  , by pressing one 1 you can check user details(total bill  is there)
+#there is always a logout option, if something happens..
+
+
+
 while(True):
     if user_obj is None:
         print("Please login to use our service!---")
@@ -292,9 +293,8 @@ while(True):
 
         print("***1 :to check user details Enter ***")
         print("\n***2 :to enter garbage to source bin Enter :***")
-        print("\n***3 : To send garbage source to GMP_bin  Enter***")
-        print("\n***4 : print all the garbage in bio garbage***")  #for testing
-        print("\n***6 : print non bio bin garbage ***")  #for testing
+        print("\n***3 : print all the garbage in bio  bin***")  
+        print("\n***4 : print non bio bin ***")  #
 
         print("***\n5 :to logout  ***")
 
@@ -309,7 +309,6 @@ while(True):
             for bill in user_obj.total_bill:
                 print(bill)
 
-
         elif choice == 2 :
             print("\nplease select garbage type first")
             garbage_type_selection_and_amount_dict = garbage_type_and_amount_selection()  
@@ -321,16 +320,19 @@ while(True):
             source_bin_obj.sending_garbage_to_GMP()
             #work of source bin obj ends ----------
             
+        
         elif choice == 3:
-            pass
-        elif choice == 4:
+            print("Bio bin garbage print starts............")
             for grbg in bio_bin_obj.bio_main_garbage_collection:
                 print(grbg)
+            print("Bio bin garbage print ends..............")
 
 
-        elif choice == 6:
+        elif choice == 4:
+            
             print("printing non bio bin all garbage--------")
             Non_Bio_bin_obj.printing_garbage()
+            print("Non Bio bin garbage print ends............")
 
 
         elif choice == 5:
